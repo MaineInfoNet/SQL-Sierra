@@ -1,0 +1,8 @@
+﻿SELECT 
+  item_status_property_myuser.name, 
+  item_status_property_myuser.code
+FROM 
+  sierra_view.item_status_property, 
+  sierra_view.item_status_property_myuser
+WHERE 
+  item_status_property_myuser.code = item_status_property.code;

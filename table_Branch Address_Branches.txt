@@ -1,0 +1,14 @@
+﻿SELECT 
+  location.code, 
+  branch.code_num,
+  branch.email_source,
+  branch.email_reply_to,
+  branch.address
+FROM 
+  sierra_view.branch, 
+  sierra_view.location
+WHERE 
+  location.branch_code_num = branch.code_num
+
+ORDER BY
+  location.code;

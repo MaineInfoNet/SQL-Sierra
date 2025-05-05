@@ -1,0 +1,11 @@
+﻿SELECT
+  bv.record_num,
+  iv.location_code,
+  iv.record_num,
+  iv.barcode    
+FROM
+ sierra_view.item_view iv,
+ sierra_view.bib_view bv
+WHERE
+  iv.location_code = 'yyy' 
+;

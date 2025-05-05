@@ -1,0 +1,7 @@
+﻿SELECT 
+  location.is_requestable, 
+  location.code
+FROM 
+  sierra_view.location
+WHERE
+  location.code LIKE 'lbn%';

@@ -1,0 +1,9 @@
+﻿-- get some info about our circ_trans dates
+SELECT
+NOW()::TIMESTAMP WITH TIME ZONE as now_gmt,
+MAX(c.transaction_gmt)::TIMESTAMP WITH TIME ZONE AS max,
+MIN(c.transaction_gmt)::TIMESTAMP WITH TIME ZONE AS min,
+AGE(MIN(c.transaction_gmt)) AS earliest_transaction_age
+
+FROM
+sierra_view.circ_trans as c

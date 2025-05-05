@@ -1,0 +1,37 @@
+﻿SELECT
+ip.barcode as ibarcode,
+co.checkout_gmt as checkedout,
+b.best_title as title,
+co.renewal_count as renewals,
+id2reckey(co.patron_record_id)||'a' AS pnumber,
+p.last_name||', '||p.first_name||' '||p.middle_name AS name,
+pv.barcode as pbarcode
+
+FROM
+sierra_view.checkout co
+JOIN
+sierra_view.item_record_property ip
+ON
+co.item_record_id = ip.item_record_id
+JOIN
+sierra_view.item_record i
+ON
+co.item_record_id = i.id
+JOIN
+sierra_view.bib_record_item_record_link l
+ON
+ip.item_record_id = l.item_record_id
+JOIN
+sierra_view.bib_record_property b
+ON
+l.bib_record_id = b.bib_record_id
+JOIN
+sierra_view.patron_record_fullname p
+ON
+co.patron_record_id = p.patron_record_id
+JOIN
+sierra_view.patron_view pv
+ON
+co.patron_record_id = pv.id
+WHERE
+renewal_count > '2'
