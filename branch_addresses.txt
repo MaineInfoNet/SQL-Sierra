@@ -1,0 +1,13 @@
+SELECT 
+  branch_myuser.name AS "Name",
+  branch.address AS "Address",
+  branch.email_source AS "Source", 
+  branch.email_reply_to AS "Reply-To"
+  
+FROM 
+  sierra_view.branch,
+  sierra_view.branch_myuser
+  
+WHERE
+branch.code_num = branch_myuser.code
+;

@@ -1,0 +1,31 @@
+##What I’m after is a report showing all of the items checked out from our 
+##Special Collections (location starts with “i”) during any given week or 
+##month.  I’m relying on the circ_trans table since some of the checkout 
+##periods will only last for an hour or so.  We want to track usage by 
+##patron type and affiliation (faculty, student, academic department, 
+##major, etc.)
+
+SELECT
+circ_trans.transaction_gmt::DATE,
+circ_trans.ptype_code,
+circ_trans.pcode4,
+circ_trans.itype_code_num,
+circ_trans.item_location_code,
+brp.best_title,
+irp.barcode,
+CASE
+        WHEN pei.index_entry IS NULL THEN UPPER (peb.index_entry)
+        ELSE UPPER (pei.index_entry)
+END AS "Call#"
+FROM
+sierra_view.circ_trans
+JOIN sierra_view.item_record i ON i.id=circ_trans.item_record_id
+JOIN sierra_view.item_record_property irp ON irp.item_record_id=i.id
+JOIN sierra_view.bib_record_item_record_link bri ON bri.item_record_id=i.id
+JOIN sierra_view.bib_record_property brp ON brp.bib_record_id=bri.bib_record_id
+LEFT JOIN sierra_view.phrase_entry pei ON pei.record_id=i.id AND pei.index_tag='c'
+LEFT JOIN sierra_view.phrase_entry peb ON peb.record_id=bri.bib_record_id and peb.index_tag='c'
+WHERE circ_trans.op_code='o'
+AND
+circ_trans.item_location_code LIKE 'i%'
+ORDER BY transaction_gmt

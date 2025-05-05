@@ -1,0 +1,5 @@
+﻿select irp.call_number
+
+from sierra_view.item_record_property AS irp, sierra_view.item_record
+
+where irp.item_record_id = item_record.record_id

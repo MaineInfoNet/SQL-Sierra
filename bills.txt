@@ -1,0 +1,14 @@
+==The Status in the Fines screen I believe you are referring to is Fine Charge Code field in Create List. The code for replacement (billed) is 3. This still will not be very helpful if you are trying to get a list of bills since you regularly purge your billed items. It can be helpful in determining who has certain charge types if you wanted to create a review file for purging fines.
+
+==Honestly, your best bet would be to use SQL to generate a list of bills. Here is a snippet:
+
+SELECT 
+id2reckey(f.patron_record_id)||'a' AS  patron_id, 
+f.title, f.assessed_gmt,
+f.item_charge_amt, 
+f.charge_code, 
+f.charge_location_code AS item_location
+
+FROM sierra_view.fine f
+
+WHERE f.charge_code = '3'

@@ -1,0 +1,1428 @@
+--
+-- Bad code report
+--
+SELECT 
+  'Bibliographic' AS "Record",
+  'Bib Level' AS "Code",
+  br.bcode1 AS "Value",
+  COUNT(br.bcode1) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.user_defined_bcode1_myuser b1 ON br.bcode1 = b1.code
+WHERE b1.code IS NULL 
+GROUP BY br.bcode1
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Material Type' AS "Code",
+  br.bcode2 AS "Value",
+  COUNT(br.bcode2) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.material_property_myuser b2 ON br.bcode2 = b2.code
+WHERE b2.code IS NULL 
+GROUP BY br.bcode2
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Bib Code 3' AS "Code",
+  br.bcode3 AS "Value",
+  COUNT(br.bcode3) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.user_defined_bcode3_myuser b3 ON br.bcode3 = b3.code
+WHERE b3.code IS NULL 
+GROUP BY br.bcode3
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Country' AS "Code",
+  br.country_code AS "Value",
+  COUNT(br.country_code) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.country_property_myuser c ON br.country_code = c.code
+WHERE c.code IS NULL
+GROUP BY br.country_code
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Language' AS "Code",
+  br.language_code AS "Value",
+  COUNT(br.language_code) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.language_property_myuser l ON br.language_code = l.code
+WHERE l.code IS NULL
+GROUP BY br.language_code
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Location' AS "Code",
+  brl.location_code AS "Value",
+  COUNT(brl.location_code) AS "Count"
+FROM
+  sierra_view.bib_record_location brl
+  LEFT JOIN sierra_view.location_myuser lm ON brl.location_code = lm.code
+WHERE lm.code IS NULL AND brl.location_code NOT IN ('multi', 'none')
+GROUP BY brl.location_code
+
+UNION 
+
+SELECT 
+  'Item' AS "Record",
+  'Item Code 2' AS "Code",
+  ir.icode2 AS "Value",
+  COUNT(ir.icode2) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.user_defined_icode2_myuser i2 ON ir.icode2 = i2.code
+WHERE i2.code IS NULL
+GROUP BY ir.icode2
+
+UNION
+
+SELECT 
+  'Item' AS "Record",
+  'Item Type' AS "Code",
+  ir.itype_code_num::varchar AS "Value",
+  COUNT(ir.itype_code_num) AS "Count"
+FROM
+  sierra_view.item_record ir
+  JOIN sierra_view.itype_property_myuser ipm ON ir.itype_code_num = ipm.code
+WHERE ipm.name = ''
+GROUP BY ir.itype_code_num
+
+UNION
+
+SELECT 
+  'Item' AS "Record",
+  'Location' AS "Code",
+  ir.location_code AS "Value",
+  COUNT(ir.location_code) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.location_myuser lm ON ir.location_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY ir.location_code
+
+UNION
+
+SELECT 
+  'Item' AS "Record",
+  'Agency' AS "Code",
+  ir.agency_code_num::varchar AS "Value",
+  COUNT(ir.agency_code_num) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.agency_property_myuser apm ON ir.agency_code_num = apm.code
+WHERE apm.code IS NULL
+GROUP BY ir.agency_code_num
+
+UNION 
+
+SELECT 
+  'Item' AS "Record",
+  'Status' AS "Code",
+  ir.item_status_code AS "Value",
+  COUNT(ir.item_status_code) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.item_status_property_myuser ispm ON ir.item_status_code = ispm.code
+WHERE ispm.code IS NULL
+GROUP BY ir.item_status_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Item' AS "Record",
+--  'Inherit Location' AS "Code",
+--  ir.is_inherit_loc AS "Value",
+--  COUNT(ir.is_inherit_loc) AS "Count"
+--FROM
+--  sierra_view.item_record ir
+--WHERE 
+--  ir.is_inherit_loc NOT IN ('')
+--GROUP BY ir.is_inherit_loc
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Item' AS "Record",
+--  'Item Message' AS "Code",
+--  ir.item_message_code AS "Value",
+--  COUNT(ir.item_message_code) AS "Count"
+--FROM
+--  sierra_view.item_record ir
+--WHERE 
+--  ir.item_message_code NOT IN ('')
+--GROUP BY ir.item_message_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Item' AS "Record",
+--  'OPAC Message' AS "Code",
+--  ir.opac_message_code AS "Value",
+--  COUNT(ir.opac_message_code) AS "Count"
+--FROM
+--  sierra_view.item_record ir
+--WHERE 
+--  ir.opac_message_code NOT IN ('')
+--GROUP BY ir.opac_message_code
+
+--UNION
+
+SELECT 
+  'Authority' AS "Record",
+  'Authority Code 1' AS "Code",
+  ar.code1 AS "Value",
+  COUNT(ar.code1) AS "Count"
+FROM
+  sierra_view.authority_record ar
+  LEFT JOIN sierra_view.user_defined_acode1_myuser a1 ON ar.code1 = a1.code
+WHERE a1.code IS NULL
+GROUP BY ar.code1
+
+UNION
+
+SELECT 
+  'Authority' AS "Record",
+  'Authority Code 2' AS "Code",
+  ar.code2 AS "Value",
+  COUNT(ar.code2) AS "Count"
+FROM
+  sierra_view.authority_record ar
+  LEFT JOIN sierra_view.user_defined_acode2_myuser a2 ON ar.code2 = a2.code
+WHERE a2.code IS NULL
+GROUP BY ar.code2
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Authority' AS "Record",
+--  'Authority Suppress' AS "Code",
+--  ar.suppress_code AS "Value",
+--  COUNT(ar.suppress_code) AS "Count"
+--FROM
+--  sierra_view.authority_record ar
+--WHERE 
+--  ar.suppress_code NOT IN ('')
+--GROUP BY ar.suppress_code 
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Holding' AS "Record",
+--  'Inherit Location' AS "Code",
+--  hr.is_inherit_loc AS "Value",
+--  COUNT(hr.is_inherit_loc) AS "Count"
+--FROM
+--  sierra_view.holding_record hr
+--WHERE 
+--  hr.is_inherit_loc NOT IN ('')
+--GROUP BY hr.is_inherit_loc
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Holding' AS "Record",
+--  'Label Type' AS "Code",
+--  hr.label_code AS "Value",
+--  COUNT(hr.label_code) AS "Count"
+--FROM
+--  sierra_view.holding_record hr
+--WHERE 
+--  hr.label_code NOT IN ('')
+--GROUP BY hr.label_code
+
+--UNION
+
+SELECT 
+  'Holding' AS "Record",
+  'Serial Code 1' AS "Code",
+  hr.scode1 AS "Value",
+  COUNT(hr.scode1) AS "Count"
+FROM
+  sierra_view.holding_record hr
+  LEFT JOIN sierra_view.user_defined_scode1_myuser s1 ON hr.scode1 = s1.code
+WHERE s1.code IS NULL
+GROUP BY hr.scode1
+
+UNION
+
+SELECT 
+  'Holding' AS "Record",
+  'Serial Code 2' AS "Code",
+  hr.scode2 AS "Value",
+  COUNT(hr.scode2) AS "Count"
+FROM
+  sierra_view.holding_record hr
+  LEFT JOIN sierra_view.user_defined_scode2_myuser s2 ON hr.scode2 = s2.code
+WHERE s2.code IS NULL
+GROUP BY hr.scode2
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Holding' AS "Record",
+--  'Receive Location' AS "Code",
+--  hr.receiving_location_code AS "Value",
+--  COUNT(hr.receiving_location_code) AS "Count"
+--FROM
+--  sierra_view.holding_record hr
+--WHERE 
+--  hr.receiving_location_code NOT IN ('')
+--GROUP BY hr.receiving_location_code
+
+--UNION
+
+SELECT 
+  'Holding' AS "Record",
+  'Vendor' AS "Code",
+  hr.vendor_code AS "Value",
+  COUNT(hr.vendor_code) AS "Count"
+FROM
+  sierra_view.holding_record hr
+  LEFT JOIN sierra_view.vendor_record vr ON hr.vendor_code = vr.code
+WHERE vr.code IS NULL
+GROUP BY hr.vendor_code
+
+UNION
+
+SELECT 
+  'Holding' AS "Record",
+  'Serial Code 3' AS "Code",
+  hr.scode3 AS "Value",
+  COUNT(hr.scode3) AS "Count"
+FROM
+  sierra_view.holding_record hr
+  LEFT JOIN sierra_view.user_defined_scode3_myuser s3 ON hr.scode3 = s3.code
+WHERE s3.code IS NULL
+GROUP BY hr.scode3
+
+UNION 
+
+SELECT 
+  'Holding' AS "Record",
+  'Serial Code 4' AS "Code",
+  hr.scode4 AS "Value",
+  COUNT(hr.scode4) AS "Count"
+FROM
+  sierra_view.holding_record hr
+  LEFT JOIN sierra_view.user_defined_scode4_myuser s4 ON hr.scode4 = s4.code
+WHERE s4.code IS NULL
+GROUP BY hr.scode4
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Holding' AS "Record",
+--  'Update Count' AS "Code",
+--  hr.update_cnt AS "Value",
+--  COUNT(hr.update_cnt) AS "Count"
+--FROM
+--  sierra_view.holding_record hr
+--WHERE 
+--  hr.update_cnt NOT IN ('')
+--GROUP BY hr.update_cnt
+
+--UNION
+
+SELECT 
+  'Holding' AS "Record",
+  'Location' AS "Code",
+  hrl.location_code AS "Value",
+  COUNT(hrl.location_code) AS "Count"
+FROM
+  sierra_view.holding_record_location hrl
+  LEFT JOIN sierra_view.location_myuser lm ON hrl.location_code = lm.code
+WHERE lm.code IS NULL AND hrl.location_code NOT IN ('multi', 'none')
+GROUP BY hrl.location_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Acq Type' AS "Code",
+  o.acq_type_code AS "Value",
+  COUNT(o.acq_type_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.acq_type_property_myuser atpm ON o.acq_type_code = atpm.code
+WHERE atpm.code IS NULL
+GROUP BY o.acq_type_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Claim' AS "Code",
+  o.claim_action_code AS "Value",
+  COUNT(o.claim_action_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.claim_action_property_myuser capm ON o.claim_action_code = capm.code
+WHERE capm.code IS NULL
+GROUP BY o.claim_action_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Order Code 1' AS "Code",
+  o.ocode1 AS "Value",
+  COUNT(o.ocode1) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.user_defined_ocode1_myuser o1 ON o.ocode1 = o1.code
+WHERE o1.code IS NULL
+GROUP BY o.ocode1
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Order Code 2' AS "Code",
+  o.ocode2 AS "Value",
+  COUNT(o.ocode2) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.user_defined_ocode2_myuser o2 ON o.ocode2 = o2.code
+WHERE o2.code IS NULL
+GROUP BY o.ocode2
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Order Code 3' AS "Code",
+  o.ocode3 AS "Value",
+  COUNT(o.ocode3) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.user_defined_ocode3_myuser o3 ON o.ocode3 = o3.code
+WHERE o3.code IS NULL
+GROUP BY o.ocode3
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Order Code 4' AS "Code",
+  o.ocode4 AS "Value",
+  COUNT(o.ocode4) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.user_defined_ocode4_myuser o4 ON o.ocode4 = o4.code
+WHERE o4.code IS NULL
+GROUP BY o.ocode4
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Format' AS "Code",
+  o.form_code AS "Value",
+  COUNT(o.form_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.form_property_myuser fpm ON o.form_code = fpm.code
+WHERE fpm.code IS NULL
+GROUP BY o.form_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Order Note' AS "Code",
+  o.order_note_code AS "Value",
+  COUNT(o.order_note_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.order_note_property_myuser onpm ON o.order_note_code = onpm.code
+WHERE onpm.code IS NULL
+GROUP BY o.order_note_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Order Type' AS "Code",
+  o.order_type_code AS "Value",
+  COUNT(o.order_type_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.order_type_property_myuser otpm ON o.order_type_code = otpm.code
+WHERE otpm.code IS NULL
+GROUP BY o.order_type_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Order' AS "Record",
+--  'Receive Action' AS "Code",
+--  o.receiving_action_code AS "Value",
+--  COUNT(o.receiving_action_code) AS "Count"
+--FROM
+--  sierra_view.order_record o
+--WHERE 
+--  o.receiving_action_code NOT IN ('')
+--GROUP BY o.receiving_action_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Order' AS "Record",
+--  'Receive Location' AS "Code",
+--  o.receiving_location_code AS "Value",
+--  COUNT(o.receiving_location_code) AS "Count"
+--FROM
+--  sierra_view.order_record o
+--WHERE 
+--  o.receiving_location_code NOT IN ('')
+--GROUP BY o.receiving_location_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Order' AS "Record",
+--  'Billing Location' AS "Code",
+--  o.billing_location_code AS "Value",
+--  COUNT(o.billing_location_code) AS "Count"
+--FROM
+--  sierra_view.order_record o
+--WHERE 
+--  o.billing_location_code NOT IN ('')
+--GROUP BY o.billing_location_code
+
+--UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Status' AS "Code",
+  o.order_status_code AS "Value",
+  COUNT(o.order_status_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.order_status_property_myuser ospm ON o.order_status_code = ospm.code
+WHERE ospm.code IS NULL
+GROUP BY o.order_status_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Transit Location' AS "Code",
+  o.temporary_location_code AS "Value",
+  COUNT(o.temporary_location_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.temp_location_property_myuser tlpm ON o.temporary_location_code = tlpm.code
+WHERE tlpm.code IS NULL
+GROUP BY o.temporary_location_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Vendor' AS "Code",
+  o.vendor_record_code AS "Value",
+  COUNT(o.vendor_record_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.vendor_record vr ON o.vendor_record_code = vr.code
+WHERE vr.code IS NULL
+GROUP BY o.vendor_record_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Language' AS "Code",
+  o.language_code AS "Value",
+  COUNT(o.language_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.language_property_myuser lpm ON o.language_code = lpm.code
+WHERE lpm.code IS NULL
+GROUP BY o.language_code
+
+UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Country' AS "Code",
+  o.country_code AS "Value",
+  COUNT(o.country_code) AS "Count"
+FROM
+  sierra_view.order_record o
+  LEFT JOIN sierra_view.country_property_myuser cpm ON o.country_code = cpm.code
+WHERE cpm.code IS NULL
+GROUP BY o.country_code
+
+UNION
+
+--SELECT 
+--  'Order' AS "Record",
+--  'Order Fund' AS "Code",
+--  fm.code AS "Value",
+--  COUNT(fm.code) AS "Count"
+--FROM
+--  sierra_view.order_record_cmf orc
+--  LEFT JOIN sierra_view.fund_master fm ON orc.fund_code::INT = fm.code_num
+--WHERE fm.accounting_unit_id = 2  -- No accounting units: remove this condition; 2 or more accounting units: add 1 to acct unit.  e.g. acct unit 2 is fm.accounting_unit_id = 3
+--AND fm.code NOT IN ('')
+--GROUP BY fm.code_num,fm.code
+
+--UNION
+
+SELECT 
+  'Order' AS "Record",
+  'Location' AS "Code",
+  cmf.location_code AS "Value",
+  COUNT(cmf.location_code) AS "Count"
+FROM
+  sierra_view.order_record_cmf cmf
+  LEFT JOIN sierra_view.location_myuser lm ON cmf.location_code = lm.code
+WHERE lm.code IS NULL AND cmf.location_code NOT IN ('multi', 'none')
+GROUP BY cmf.location_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Vendor' AS "Record",
+--  'Claim Cycle' AS "Code",
+--  vr.claim_cycle_code AS "Value",
+--  COUNT(vr.claim_cycle_code) AS "Count"
+--FROM
+--  sierra_view.vendor_record vr
+--WHERE 
+--  vr.claim_cycle_code NOT IN ('')
+--GROUP BY vr.claim_cycle_code
+
+--UNION
+
+SELECT 
+  'Vendor' AS "Record",
+  'Vendor Code 1' AS "Code",
+  vr.vcode1 AS "Value",
+  COUNT(vr.vcode1) AS "Count"
+FROM
+  sierra_view.vendor_record vr
+  LEFT JOIN sierra_view.user_defined_vcode1_myuser v1 ON vr.vcode1 = v1.code
+WHERE v1.code IS NULL
+GROUP BY vr.vcode1
+
+UNION
+
+SELECT 
+  'Vendor' AS "Record",
+  'Vendor Code 2' AS "Code",
+  vr.vcode2 AS "Value",
+  COUNT(vr.vcode2) AS "Count"
+FROM
+  sierra_view.vendor_record vr
+  LEFT JOIN sierra_view.user_defined_vcode2_myuser v2 ON vr.vcode2 = v2.code
+WHERE v2.code IS NULL
+GROUP BY vr.vcode2
+
+UNION
+
+SELECT 
+  'Vendor' AS "Record",
+  'Vendor Code 3' AS "Code",
+  vr.vcode3 AS "Value",
+  COUNT(vr.vcode3) AS "Count"
+FROM
+  sierra_view.vendor_record vr
+  LEFT JOIN sierra_view.user_defined_vcode3_myuser v3 ON vr.vcode3 = v3.code
+WHERE v3.code IS NULL
+GROUP BY vr.vcode3
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Vendor' AS "Record",
+--  'Vendor Message' AS "Code",
+--  vr.vendor_message_code AS "Value",
+--  COUNT(vr.vendor_message_code) AS "Count"
+--FROM
+--  sierra_view.vendor_record vr
+--WHERE 
+--  vr.vendor_message_code NOT IN ('')
+--GROUP BY vr.vendor_message_code
+
+--UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Type' AS "Code",
+  pr.ptype_code::varchar AS "Value",
+  COUNT(pr.ptype_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  JOIN sierra_view.ptype_property_myuser ppm ON pr.ptype_code = ppm.value
+WHERE ppm.name = ''
+GROUP BY pr.ptype_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Home Library' AS "Code",
+  pr.home_library_code AS "Value",
+  COUNT(pr.home_library_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.location_myuser lm ON pr.home_library_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY pr.home_library_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 1' AS "Code",
+  pr.pcode1 AS "Value",
+  COUNT(pr.pcode1) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode1_myuser p1 ON pr.pcode1 = p1.code
+WHERE p1.code IS NULL
+GROUP BY pr.pcode1
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 2' AS "Code",
+  pr.pcode2 AS "Value",
+  COUNT(pr.pcode2) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode2_myuser p2 ON pr.pcode1 = p2.code
+WHERE p2.code IS NULL
+GROUP BY pr.pcode2
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 3' AS "Code",
+  pr.pcode3::VARCHAR AS "Value",
+  COUNT(pr.pcode3) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode3_myuser p3 ON pr.pcode3 = p3.code::INT
+WHERE p3.code IS NULL
+GROUP BY pr.pcode3
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 4' AS "Code",
+  pr.pcode4::VARCHAR AS "Value",
+  COUNT(pr.pcode4) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode4_myuser p4 ON pr.pcode4 = p4.code::INT
+WHERE p4.code IS NULL
+GROUP BY pr.pcode4
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Manual Block' AS "Code",
+  pr.mblock_code AS "Value",
+  COUNT(pr.mblock_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.mblock_property_myuser mpm ON pr.mblock_code = mpm.code
+WHERE mpm.code IS NULL
+GROUP BY pr.mblock_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Agency' AS "Code",
+  pr.patron_agency_code_num::varchar AS "Value",
+  COUNT(pr.patron_agency_code_num) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.agency_property_myuser apm ON pr.patron_agency_code_num = apm.code
+WHERE apm.code IS NULL
+GROUP BY pr.patron_agency_code_num
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Preferred Language' AS "Code",
+  pr.iii_language_pref_code AS "Value",
+  COUNT(pr.iii_language_pref_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.language_property_myuser lpm ON pr.iii_language_pref_code = lpm.code
+WHERE lpm.code IS NULL
+GROUP BY pr.iii_language_pref_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Patron' AS "Record",
+--  'Patron Message' AS "Code",
+--  p.patron_message_code AS "Value",
+--  COUNT(p.patron_message_code) AS "Count"
+--FROM
+--  sierra_view.patron_record p
+--WHERE 
+--  p.patron_message_code NOT IN ('')
+--GROUP BY p.patron_message_code 
+
+--UNION 
+
+SELECT 
+  'Patron' AS "Record",
+  'Notice Preference' AS "Code",
+  pr.notification_medium_code AS "Value",
+  COUNT(pr.notification_medium_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.notification_medium_property_myuser nmpm ON pr.notification_medium_code = nmpm.code
+WHERE nmpm.code IS NULL
+GROUP BY pr.notification_medium_code
+
+UNION
+
+SELECT 
+  'Course' AS "Record",
+  'Course Code 1' AS "Code",
+  cr.ccode1 AS "Value",
+  COUNT(cr.ccode1) AS "Count"
+FROM
+  sierra_view.course_record cr
+  LEFT JOIN sierra_view.user_defined_ccode1_myuser c1 ON cr.ccode1 = c1.code
+WHERE c1.code IS NULL
+GROUP BY cr.ccode1
+
+UNION
+
+SELECT 
+  'Course' AS "Record",
+  'Course Code 2' AS "Code",
+  cr.ccode2 AS "Value",
+  COUNT(cr.ccode2) AS "Count"
+FROM
+  sierra_view.course_record cr
+  LEFT JOIN sierra_view.user_defined_ccode2_myuser c2 ON cr.ccode2 = c2.code
+WHERE c2.code IS NULL
+GROUP BY cr.ccode2
+
+UNION
+
+SELECT 
+  'Course' AS "Record",
+  'Course Code 3' AS "Code",
+  cr.ccode3 AS "Value",
+  COUNT(cr.ccode3) AS "Count"
+FROM
+  sierra_view.course_record cr
+  LEFT JOIN sierra_view.user_defined_ccode3_myuser c3 ON cr.ccode3 = c3.code
+WHERE c3.code IS NULL
+GROUP BY cr.ccode3
+
+UNION
+
+SELECT 
+  'Course' AS "Record",
+  'Location' AS "Code",
+  cr.location_code AS "Value",
+  COUNT(cr.location_code) AS "Count"
+FROM
+  sierra_view.course_record cr
+  LEFT JOIN sierra_view.location_myuser lm ON cr.location_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY cr.location_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Resource' AS "Record",
+--  'Rights Type' AS "Code",
+--  rr.rights_code AS "Value",
+--  COUNT(rr.rights_code) AS "Count"
+--FROM
+--  sierra_view.resource_record rr
+--WHERE 
+--  rr.rights_code NOT IN ('')
+--GROUP BY rr.rights_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Resource' AS "Record",
+--  'Suppress' AS "Code",
+--  rr.suppress_code AS "Value",
+--  COUNT(rr.suppress_code) AS "Count"
+--FROM
+--  sierra_view.resource_record rr
+--WHERE 
+--  rr.suppress_code NOT IN ('')
+--GROUP BY rr.suppress_code
+
+--UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Resource Code 1' AS "Code",
+  rr.ecode1 AS "Value",
+  COUNT(rr.ecode1) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.user_defined_ecode1_myuser e1 ON rr.ecode1 = e1.code
+WHERE e1.code IS NULL
+GROUP BY rr.ecode1
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Resource Code 2' AS "Code",
+  rr.ecode2 AS "Value",
+  COUNT(rr.ecode2) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.user_defined_ecode2_myuser e2 ON rr.ecode2 = e2.code
+WHERE e2.code IS NULL
+GROUP BY rr.ecode2
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Resource Code 3' AS "Code",
+  rr.ecode3 AS "Value",
+  COUNT(rr.ecode3) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.user_defined_ecode3_myuser e3 ON rr.ecode3 = e3.code
+WHERE e3.code IS NULL
+GROUP BY rr.ecode3
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Resource Code 4' AS "Code",
+  rr.ecode4 AS "Value",
+  COUNT(rr.ecode4) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.user_defined_ecode4_myuser e4 ON rr.ecode4 = e4.code
+WHERE e4.code IS NULL
+GROUP BY rr.ecode4
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Resource' AS "Record",
+--  'Resource Status' AS "Code",
+--  rr.resource_status_code AS "Value",
+--  COUNT(rr.resource_status_code) AS "Count"
+--FROM
+--  sierra_view.resource_record rr
+--WHERE 
+--  rr.resource_status_code NOT IN ('')
+--GROUP BY rr.resource_status_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Resource' AS "Record",
+--  'Package Type' AS "Code",
+--  rr.package_code AS "Value",
+--  COUNT(rr.package_code) AS "Count"
+--FROM
+--  sierra_view.resource_record rr
+--WHERE 
+--  rr.package_code NOT IN ('')
+--GROUP BY rr.package_code
+
+--UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Access Provider' AS "Code",
+  rr.access_provider_code AS "Value",
+  COUNT(rr.access_provider_code) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.contact_record cr ON rr.access_provider_code = cr.code
+WHERE cr.code IS NULL
+GROUP BY rr.access_provider_code
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Publisher' AS "Code",
+  rr.publisher_code AS "Value",
+  COUNT(rr.publisher_code) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.contact_record cr ON rr.publisher_code = cr.code
+WHERE cr.code IS NULL
+GROUP BY rr.publisher_code
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Copyright Holder' AS "Code",
+  rr.copyright_holder_code AS "Value",
+  COUNT(rr.copyright_holder_code) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.contact_record cr ON rr.copyright_holder_code = cr.code
+WHERE cr.code IS NULL
+GROUP BY rr.copyright_holder_code
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Data Provider' AS "Code",
+  rr.data_provider_code AS "Value",
+  COUNT(rr.data_provider_code) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.contact_record cr ON rr.data_provider_code = cr.code
+WHERE cr.code IS NULL
+GROUP BY rr.data_provider_code
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Consortium' AS "Code",
+  rr.consortium_code AS "Value",
+  COUNT(rr.consortium_code) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.contact_record cr ON rr.consortium_code = cr.code
+WHERE cr.code IS NULL
+GROUP BY rr.consortium_code
+
+UNION
+
+SELECT 
+  'Resource' AS "Record",
+  'Location' AS "Code",
+  rr.location_code AS "Value",
+  COUNT(rr.location_code) AS "Count"
+FROM
+  sierra_view.resource_record rr
+  LEFT JOIN sierra_view.location_myuser lm ON rr.location_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY rr.location_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Confidential' AS "Code",
+--  lr.confidential_code AS "Value",
+--  COUNT(lr.confidential_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.confidential_code NOT IN ('')
+--GROUP BY lr.confidential_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Auto Renew' AS "Code",
+--  lr.auto_renew_code AS "Value",
+--  COUNT(lr.auto_renew_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.auto_renew_code NOT IN ('')
+--GROUP BY lr.auto_renew_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Status' AS "Code",
+--  lr.status_code AS "Value",
+--  COUNT(lr.status_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.status_code NOT IN ('')
+--GROUP BY lr.status_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Perpetual Access' AS "Code",
+--  lr.perpetual_access_code AS "Value",
+--  COUNT(lr.perpetual_access_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.perpetual_access_code NOT IN ('')
+--GROUP BY lr.perpetual_access_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Archival Provisions' AS "Code",
+--  lr.archival_provisions_code AS "Value",
+--  COUNT(lr.archival_provisions_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.archival_provisions_code NOT IN ('')
+--GROUP BY lr.archival_provisions_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Warranty' AS "Code",
+--  lr.warranty_code AS "Value",
+--  COUNT(lr.warranty_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.warranty_code NOT IN ('')
+--GROUP BY lr.warranty_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Disability Compliance' AS "Code",
+--  lr.disability_compliance_code AS "Value",
+--  COUNT(lr.disability_compliance_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.disability_compliance_code NOT IN ('')
+--GROUP BY lr.disability_compliance_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Indemnification' AS "Code",
+--  lr.idemnification_code AS "Value",
+--  COUNT(lr.idemnification_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.idemnification_code NOT IN ('')
+--GROUP BY lr.idemnification_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Law & Venue' AS "Code",
+--  lr.law_and_venue_code AS "Value",
+--  COUNT(lr.law_and_venue_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.law_and_venue_code NOT IN ('')
+--GROUP BY lr.law_and_venue_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'User Confidentiality ' AS "Code",
+--  lr.user_confidentiality_code AS "Value",
+--  COUNT(lr.user_confidentiality_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.user_confidentiality_code NOT IN ('')
+--GROUP BY lr.user_confidentiality_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Licence' AS "Record",
+--  'Suppression' AS "Code",
+--  lr.suppress_code AS "Value",
+--  COUNT(lr.suppress_code) AS "Count"
+--FROM
+--  sierra_view.license_record lr
+--WHERE 
+--  lr.suppress_code NOT IN ('')
+--GROUP BY lr.suppress_code
+
+--UNION
+
+SELECT 
+  'License' AS "Record",
+  'License Code 1' AS "Code",
+  lr.lcode1 AS "Value",
+  COUNT(lr.lcode1) AS "Count"
+FROM
+  sierra_view.license_record lr
+  LEFT JOIN sierra_view.user_defined_lcode1_myuser l1 ON lr.lcode1 = l1.code
+WHERE l1.code IS NULL
+GROUP BY lr.lcode1
+
+UNION
+
+SELECT 
+  'License' AS "Record",
+  'License Code 2' AS "Code",
+  lr.lcode2 AS "Value",
+  COUNT(lr.lcode2) AS "Count"
+FROM
+  sierra_view.license_record lr
+  LEFT JOIN sierra_view.user_defined_lcode2_myuser l2 ON lr.lcode2 = l2.code
+WHERE l2.code IS NULL
+GROUP BY lr.lcode2
+
+UNION
+
+SELECT 
+  'License' AS "Record",
+  'License Code 3' AS "Code",
+  lr.lcode3 AS "Value",
+  COUNT(lr.lcode3) AS "Count"
+FROM
+  sierra_view.license_record lr
+  LEFT JOIN sierra_view.user_defined_lcode3_myuser l3 ON lr.lcode3 = l3.code
+WHERE l3.code IS NULL
+GROUP BY lr.lcode3
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Program' AS "Record",
+--  'Registration Possible' AS "Code",
+--  pr.reg_allowed_code  AS "Value",
+--  COUNT(pr.reg_allowed_code) AS "Count"
+--FROM
+--  sierra_view.program_record pr
+--WHERE 
+--  pr.reg_allowed_code NOT IN ('')
+--GROUP BY pr.reg_allowed_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Program' AS "Record",
+--  'Eligibility' AS "Code",
+--  pr.eligibility_code AS "Value",
+--  COUNT(pr.eligibility_code) AS "Count"
+--FROM
+--  sierra_view.program_record pr
+--WHERE 
+--  pr.eligibility_code NOT IN ('')
+--GROUP BY pr.eligibility_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Program' AS "Record",
+--  'Autotransfer' AS "Code",
+--  pr.auto_transfer_code AS "Value",
+--  COUNT(pr.auto_transfer_code) AS "Count"
+--FROM
+--  sierra_view.program_record pr
+--WHERE 
+--  pr.auto_transfer_code NOT IN ('')
+--GROUP BY pr.auto_transfer_code
+
+--UNION
+
+SELECT 
+  'Program' AS "Record",
+  'Program Code 1' AS "Code",
+  pr.gcode1 AS "Value",
+  COUNT(pr.gcode1) AS "Count"
+FROM
+  sierra_view.program_record pr
+  LEFT JOIN sierra_view.user_defined_gcode1_myuser g1 ON pr.gcode1 = g1.code
+WHERE g1.code IS NULL
+GROUP BY pr.gcode1
+
+UNION
+
+SELECT 
+  'Program' AS "Record",
+  'Program Code 2' AS "Code",
+  pr.gcode2 AS "Value",
+  COUNT(pr.gcode2) AS "Count"
+FROM
+  sierra_view.program_record pr
+  LEFT JOIN sierra_view.user_defined_gcode2_myuser g2 ON pr.gcode2 = g2.code
+WHERE g2.code IS NULL
+GROUP BY pr.gcode2
+
+UNION
+
+SELECT 
+  'Program' AS "Record",
+  'Program Code 3' AS "Code",
+  pr.gcode3 AS "Value",
+  COUNT(pr.gcode3) AS "Count"
+FROM
+  sierra_view.program_record pr
+  LEFT JOIN sierra_view.user_defined_gcode3_myuser g3 ON pr.gcode3 = g3.code
+WHERE g3.code IS NULL
+GROUP BY pr.gcode3
+
+UNION
+
+SELECT 
+  'Program' AS "Record",
+  'Location' AS "Code",
+  prl.location_code AS "Value",
+  COUNT(prl.location_code) AS "Count"
+FROM
+  sierra_view.program_record_location prl
+  LEFT JOIN sierra_view.location_myuser lm ON prl.location_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY prl.location_code
+
+UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Section' AS "Record",
+--  'Section Status' AS "Code",
+--  sr.status_code AS "Value",
+--  COUNT(sr.status_code) AS "Count"
+--FROM
+--  sierra_view.section_record sr
+--WHERE 
+--  sr.status_code NOT IN ('')
+--GROUP BY sr.status_code
+
+--UNION
+
+-- No corresponding parameter table
+--SELECT 
+--  'Section' AS "Record",
+--  'Payment Type' AS "Code",
+--  sr.ecommerce_code AS "Value",
+--  COUNT(sr.ecommerce_code) AS "Count"
+--FROM
+--  sierra_view.section_record sr
+--WHERE 
+--  sr.ecommerce_code NOT IN ('')
+--GROUP BY sr.ecommerce_code
+
+--UNION
+
+SELECT 
+  'Section' AS "Record",
+  'Section Code 1' AS "Code",
+  sr.zcode1 AS "Value",
+  COUNT(sr.zcode1) AS "Count"
+FROM
+  sierra_view.section_record sr
+  LEFT JOIN sierra_view.user_defined_zcode1_myuser z1 ON sr.zcode1 = z1.code
+WHERE z1.code IS NULL
+GROUP BY sr.zcode1
+
+UNION
+
+SELECT 
+  'Section' AS "Record",
+  'Section Code 2' AS "Code",
+  sr.zcode2 AS "Value",
+  COUNT(sr.zcode2) AS "Count"
+FROM
+  sierra_view.section_record sr
+  LEFT JOIN sierra_view.user_defined_zcode2_myuser z2 ON sr.zcode2 = z2.code
+WHERE z2.code IS NULL
+GROUP BY sr.zcode2
+
+UNION
+
+SELECT 
+  'Section' AS "Record",
+  'Section Code 3' AS "Code",
+  sr.zcode3 AS "Value",
+  COUNT(sr.zcode3) AS "Count"
+FROM
+  sierra_view.section_record sr
+  LEFT JOIN sierra_view.user_defined_zcode3_myuser z3 ON sr.zcode3 = z3.code
+WHERE z3.code IS NULL
+GROUP BY sr.zcode3
+
+UNION 
+
+SELECT 
+  'Section' AS "Record",
+  'Location' AS "Code",
+  sr.location_code AS "Value",
+  COUNT(sr.location_code) AS "Count"
+FROM
+  sierra_view.section_record sr
+  LEFT JOIN sierra_view.location_myuser lm ON sr.location_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY sr.location_code
+
+ORDER BY 1, 2, 3

@@ -1,0 +1,274 @@
+--
+-- Bad code report
+--
+SELECT 
+  'Bibliographic' AS "Record",
+  'Bib Level' AS "Code",
+  br.bcode1 AS "Value",
+  COUNT(br.bcode1) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.user_defined_bcode1_myuser b1 ON br.bcode1 = b1.code
+WHERE b1.code IS NULL 
+GROUP BY br.bcode1
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Material Type' AS "Code",
+  br.bcode2 AS "Value",
+  COUNT(br.bcode2) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.material_property_myuser b2 ON br.bcode2 = b2.code
+WHERE b2.code IS NULL 
+GROUP BY br.bcode2
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Bib Code 3' AS "Code",
+  br.bcode3 AS "Value",
+  COUNT(br.bcode3) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.user_defined_bcode3_myuser b3 ON br.bcode3 = b3.code
+WHERE b3.code IS NULL 
+GROUP BY br.bcode3
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Country' AS "Code",
+  br.country_code AS "Value",
+  COUNT(br.country_code) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.country_property_myuser c ON br.country_code = c.code
+WHERE c.code IS NULL
+GROUP BY br.country_code
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Language' AS "Code",
+  br.language_code AS "Value",
+  COUNT(br.language_code) AS "Count"
+FROM
+  sierra_view.bib_record br
+  LEFT JOIN sierra_view.language_property_myuser l ON br.language_code = l.code
+WHERE l.code IS NULL
+GROUP BY br.language_code
+
+UNION
+
+SELECT 
+  'Bibliographic' AS "Record",
+  'Location' AS "Code",
+  brl.location_code AS "Value",
+  COUNT(brl.location_code) AS "Count"
+FROM
+  sierra_view.bib_record_location brl
+  LEFT JOIN sierra_view.location_myuser lm ON brl.location_code = lm.code
+WHERE lm.code IS NULL AND brl.location_code NOT IN ('multi', 'none')
+GROUP BY brl.location_code
+
+UNION 
+
+SELECT 
+  'Item' AS "Record",
+  'Item Code 2' AS "Code",
+  ir.icode2 AS "Value",
+  COUNT(ir.icode2) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.user_defined_icode2_myuser i2 ON ir.icode2 = i2.code
+WHERE i2.code IS NULL
+GROUP BY ir.icode2
+
+UNION
+
+SELECT 
+  'Item' AS "Record",
+  'Item Type' AS "Code",
+  ir.itype_code_num::varchar AS "Value",
+  COUNT(ir.itype_code_num) AS "Count"
+FROM
+  sierra_view.item_record ir
+  JOIN sierra_view.itype_property_myuser ipm ON ir.itype_code_num = ipm.code
+WHERE ipm.name = ''
+GROUP BY ir.itype_code_num
+
+UNION
+
+SELECT 
+  'Item' AS "Record",
+  'Location' AS "Code",
+  ir.location_code AS "Value",
+  COUNT(ir.location_code) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.location_myuser lm ON ir.location_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY ir.location_code
+
+UNION
+
+SELECT 
+  'Item' AS "Record",
+  'Agency' AS "Code",
+  ir.agency_code_num::varchar AS "Value",
+  COUNT(ir.agency_code_num) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.agency_property_myuser apm ON ir.agency_code_num = apm.code
+WHERE apm.code IS NULL
+GROUP BY ir.agency_code_num
+
+UNION 
+
+SELECT 
+  'Item' AS "Record",
+  'Status' AS "Code",
+  ir.item_status_code AS "Value",
+  COUNT(ir.item_status_code) AS "Count"
+FROM
+  sierra_view.item_record ir
+  LEFT JOIN sierra_view.item_status_property_myuser ispm ON ir.item_status_code = ispm.code
+WHERE ispm.code IS NULL
+GROUP BY ir.item_status_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Type' AS "Code",
+  pr.ptype_code::varchar AS "Value",
+  COUNT(pr.ptype_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  JOIN sierra_view.ptype_property_myuser ppm ON pr.ptype_code = ppm.value
+WHERE ppm.name = ''
+GROUP BY pr.ptype_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Home Library' AS "Code",
+  pr.home_library_code AS "Value",
+  COUNT(pr.home_library_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.location_myuser lm ON pr.home_library_code = lm.code
+WHERE lm.code IS NULL
+GROUP BY pr.home_library_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 1' AS "Code",
+  pr.pcode1 AS "Value",
+  COUNT(pr.pcode1) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode1_myuser p1 ON pr.pcode1 = p1.code
+WHERE p1.code IS NULL
+GROUP BY pr.pcode1
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 2' AS "Code",
+  pr.pcode2 AS "Value",
+  COUNT(pr.pcode2) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode2_myuser p2 ON pr.pcode1 = p2.code
+WHERE p2.code IS NULL
+GROUP BY pr.pcode2
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 3' AS "Code",
+  pr.pcode3::VARCHAR AS "Value",
+  COUNT(pr.pcode3) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode3_myuser p3 ON pr.pcode3 = p3.code::INT
+WHERE p3.code IS NULL
+GROUP BY pr.pcode3
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Patron Code 4' AS "Code",
+  pr.pcode4::VARCHAR AS "Value",
+  COUNT(pr.pcode4) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.user_defined_pcode4_myuser p4 ON pr.pcode4 = p4.code::INT
+WHERE p4.code IS NULL
+GROUP BY pr.pcode4
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Manual Block' AS "Code",
+  pr.mblock_code AS "Value",
+  COUNT(pr.mblock_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.mblock_property_myuser mpm ON pr.mblock_code = mpm.code
+WHERE mpm.code IS NULL
+GROUP BY pr.mblock_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Agency' AS "Code",
+  pr.patron_agency_code_num::varchar AS "Value",
+  COUNT(pr.patron_agency_code_num) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.agency_property_myuser apm ON pr.patron_agency_code_num = apm.code
+WHERE apm.code IS NULL
+GROUP BY pr.patron_agency_code_num
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Preferred Language' AS "Code",
+  pr.iii_language_pref_code AS "Value",
+  COUNT(pr.iii_language_pref_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.language_property_myuser lpm ON pr.iii_language_pref_code = lpm.code
+WHERE lpm.code IS NULL
+GROUP BY pr.iii_language_pref_code
+
+UNION
+
+SELECT 
+  'Patron' AS "Record",
+  'Notice Preference' AS "Code",
+  pr.notification_medium_code AS "Value",
+  COUNT(pr.notification_medium_code) AS "Count"
+FROM
+  sierra_view.patron_record pr
+  LEFT JOIN sierra_view.notification_medium_property_myuser nmpm ON pr.notification_medium_code = nmpm.code
+WHERE nmpm.code IS NULL
+GROUP BY pr.notification_medium_code
+
