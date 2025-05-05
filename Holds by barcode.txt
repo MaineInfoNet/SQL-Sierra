@@ -17,4 +17,4 @@ WHERE
   hold.patron_record_id = patron_record.record_id AND
   item_view.id = item_record.id AND
   patron_record.id = patron_view.id AND
-  item_view.barcode = '33980100156839';
+  item_view.barcode = '';
