@@ -17,6 +17,6 @@ FROM
   iii_user_workflow_myuser.iii_user_id = iii_user_workflow.iii_user_id AND
   iii_user_workflow_myuser.iii_user_id = iii_user_permission_myuser.iii_user_id AND
   iii_user_permission_myuser.permission_num = '25' AND
-  iii_user_workflow_myuser.workflow_name = 'dadmin'
+  iii_user_workflow_myuser.workflow_name = ''
 
 ORDER BY name, iii_user.name;
