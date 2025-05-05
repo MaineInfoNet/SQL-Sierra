@@ -1,0 +1,28 @@
+SELECT
+  concat(
+    rm.record_type_code,
+    rm.record_num
+  )
+FROM
+  -- the table that links bibs with items
+  sierra_view.bib_record_item_record_link          AS bilink
+JOIN
+  -- join to item record table for total checkouts
+  sierra_view.item_record                          AS i
+  ON
+  i.record_id = bilink.item_record_id
+JOIN
+  -- join for record type code and record number
+  sierra_view.record_metadata                      AS rm
+  ON
+  rm.id = bilink.bib_record_id
+GROUP BY
+  -- group by column 1 (bib number)
+  1
+HAVING
+  -- limit to bibs with more than one attached item
+  COUNT(*) > 1
+  AND
+  -- limit to bibs where total checkouts from all
+  -- items is zero
+  SUM(i.checkout_total) = 0

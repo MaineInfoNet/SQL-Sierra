@@ -1,0 +1,25 @@
+﻿SELECT distinct 'b'|| rmb.record_num || 'a' AS "Bib Record Num", i.location_code, 
+	CASE
+		WHEN pei.index_entry IS NULL THEN UPPER(peb.index_entry) 
+		ELSE UPPER(pei.index_entry)
+	END 
+	AS "Call#",
+brp.best_author AS "Author", brp.best_title AS "Title", 
+string_agg(distinct i.barcode, ' ') AS "Barcode",
+string_agg(distinct pes.index_entry, ' | ') AS "Series Info", 
+count(distinct ic.id) AS "Item Count",  
+count(distinct h.id) AS "Hold Count"
+FROM sierra_view.item_view i
+JOIN sierra_view.bib_record_item_record_link bri ON bri.item_record_id=i.id
+JOIN sierra_view.record_metadata rmb ON rmb.id=bri.bib_record_id AND rmb.record_type_code='b'
+JOIN sierra_view.phrase_entry peb ON peb.record_id=bri.bib_record_id AND peb.index_tag='c'
+JOIN sierra_view.bib_record_property brp ON brp.bib_record_id=bri.bib_record_id
+LEFT JOIN sierra_view.phrase_entry pei ON pei.record_id=bri.item_record_id AND pei.index_tag='c'
+LEFT JOIN sierra_view.phrase_entry pes ON pes.record_id=bri.bib_record_id AND pes.index_tag='t' and pes.varfield_type_code='s'
+LEFT JOIN sierra_view.item_record ic ON ic.id=i.id AND ic.item_status_code not in ('z','m','r','b','n','t','l','a','$','e','i','k','p','q','w','5')
+LEFT JOIN sierra_view.hold h ON (h.record_id=bri.bib_record_id OR h.record_id=i.id)
+
+WHERE 
+i.record_creation_date_gmt::date>=NOW()::DATE-EXTRACT(DOW FROM NOW())::INTEGER-60 
+GROUP BY rmb.record_num, i.location_code, "Call#", brp.best_author, brp.best_title
+ORDER BY i.location_code, "Call#", brp.best_author, brp.best_title
